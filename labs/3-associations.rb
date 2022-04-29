@@ -17,6 +17,35 @@ Activity.destroy_all
 # 1. insert 3 rows in the activities table with relationships to
 # a single salesperson and 2 different contacts
 
+mgarcia = Salesperson.find_by({"email"=>"mgarcia@gmail.com"})
+narellano = Salesperson.find_by({"email"=>"narellano@gmail.com"})
+tcook = Contact.find_by({"email" => "tim@apple.com"})
+jbezos = Contact.find_by({"email" => "jeff@amazon.com"})
+
+activity = Activity.new
+activity["salesperson_id"] = mgarcia["id"]
+activity["contact_id"] = tcook["id"]
+activity["note"] = "llamada"
+activity.save
+
+activity = Activity.new
+activity["salesperson_id"] = mgarcia["id"]
+activity["contact_id"] = jbezos["id"]
+activity["note"] = "email"
+activity.save
+
+activity = Activity.new
+activity["salesperson_id"] = mgarcia["id"]
+activity["contact_id"] = tcook["id"]
+activity["note"] = "almuerzo"
+activity.save
+
+activity = Activity.new
+activity["salesperson_id"] = narellano["id"]
+activity["contact_id"] = tcook["id"]
+activity["note"] = "comida"
+activity.save
+
 # 2. Display all the activities between the salesperson used above
 # and one of the contacts (sample output below):
 
@@ -24,6 +53,12 @@ Activity.destroy_all
 # Activities between Ben and Tim Cook:
 # - quick checkin over facetime
 # - met at Cupertino
+
+mgarcia_tcook_activities = Activity.where({"salesperson_id" => mgarcia["id"],"contact_id" => tcook["id"]})
+
+for activity in mgarcia_tcook_activities
+    puts "#{activity["note"]}"
+end
 
 # CHALLENGE:
 # 3. Similar to above, but display all of the activities for the salesperson
